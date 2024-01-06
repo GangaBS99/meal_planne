@@ -19,51 +19,57 @@ class AddMealScreen extends StatefulWidget {
 }
 
 class _AddMealScreenState extends State<AddMealScreen> {
-
   String? valueChoose;
   List mealList = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert"];
   final _formKey = GlobalKey<FormState>();
 
   final mealNameController = TextEditingController();
   final categoryController = TextEditingController();
-  
 
   _openGoogle() async {
     const url = 'https://www.google.com';
-    if (await canLaunchUrl(url as Uri)) {
-      await launchUrl(url as Uri);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }
   }
 
+  Future<void> addMeal() async {
+    final date = Provider.of<Matchdate>(context, listen: false).datestore;
+    if (date != null) {
+      final newDate = DateTime(date.year, date.month, date.day);
 
-
-  Future<void> addMeal() {
-  
-    return FirebaseFirestore.instance
-        .collection("addMealData")
-        .doc(Provider.of<Matchdate>(context,listen: false).datestore.toString())
-        .set({
-      'meal_name': mealNameController.text.trim(),
-      'category': valueChoose,
-      'create_time': Provider.of<Matchdate>(context,listen: false).datestore,
-      'current_id': FirebaseAuth.instance.currentUser!.uid,
-    }).then((value) => print('Meal Added'));
+      return FirebaseFirestore.instance
+          .collection("addMealData")
+          .doc(newDate.toString())
+          .set({
+        'meal_name': mealNameController.text.trim(),
+        'category': valueChoose,
+        'create_time': newDate,
+        'current_id': FirebaseAuth.instance.currentUser!.uid,
+      }).then((value) => print('Meal Added'));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor:Theme.of(context).brightness == Brightness.light ? Colors.orange.shade50 : Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Colors.orange.shade50
+            : Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor:Theme.of(context).brightness == Brightness.light ? Colors.orange.shade50 : Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.orange.shade50
+              : Theme.of(context).scaffoldBackgroundColor,
           automaticallyImplyLeading: false,
           title: DefaultTextStyle(
             style: GoogleFonts.kalam(
-                textStyle:TextStyle(
-                    color: Theme.of(context).brightness == Brightness.light ? MyColors.darkGreen : Colors.white,
+                textStyle: TextStyle(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? MyColors.darkGreen
+                        : Colors.white,
                     fontSize: 32,
                     fontWeight: FontWeight.bold)),
             child: AnimatedTextKit(
@@ -91,7 +97,10 @@ class _AddMealScreenState extends State<AddMealScreen> {
                           horizontal: 15, vertical: 30),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).brightness == Brightness.light ? Colors.orange.shade100 : Colors.black54,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.orange.shade100
+                                    : Colors.black54,
                             borderRadius: BorderRadius.circular(20)),
                         // height: MediaQuery.of(context).size.height/2.3,
                         width: MediaQuery.of(context).size.width,
@@ -101,11 +110,15 @@ class _AddMealScreenState extends State<AddMealScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 30),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
                                 child: Text(
                                   "Category",
                                   style: TextStyle(
-                                      color: Theme.of(context).brightness == Brightness.light ? MyColors.darkGreen : Colors.white,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? MyColors.darkGreen
+                                          : Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12),
                                 ),
@@ -116,12 +129,20 @@ class _AddMealScreenState extends State<AddMealScreen> {
                                 child: DropdownButtonFormField<String>(
                                   decoration: const InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: MyColors.darkGreen), // Change the color here
+                                      borderSide: BorderSide(
+                                          color: MyColors
+                                              .darkGreen), // Change the color here
                                     ),
                                   ),
-                                  dropdownColor: Theme.of(context).brightness == Brightness.light ? Colors.orange.shade100 : Colors.black,
+                                  dropdownColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.orange.shade100
+                                      : Colors.black,
                                   style: TextStyle(
-                                    color: Theme.of(context).brightness == Brightness.light ? MyColors.darkGreen : Colors.white,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? MyColors.darkGreen
+                                        : Colors.white,
                                     fontSize: 18,
                                   ),
                                   value: valueChoose,
@@ -150,7 +171,10 @@ class _AddMealScreenState extends State<AddMealScreen> {
                                 child: Text(
                                   "Meal name",
                                   style: TextStyle(
-                                      color: Theme.of(context).brightness == Brightness.light ? MyColors.darkGreen : Colors.white,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? MyColors.darkGreen
+                                          : Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12),
                                 ),
@@ -195,7 +219,10 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).brightness == Brightness.light ? Colors.orange : Colors.black26,
+                    backgroundColor:
+                        Theme.of(context).brightness == Brightness.light
+                            ? Colors.orange
+                            : Colors.black26,
                     minimumSize: const Size(200, 45),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
@@ -223,10 +250,14 @@ class _AddMealScreenState extends State<AddMealScreen> {
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           child: BottomAppBar(
-            color: Theme.of(context).brightness == Brightness.light ? Colors.orange.shade400 : Colors.black54,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.orange.shade400
+                : Colors.black54,
             child: Container(
               decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.light ? Colors.orange.shade400 : Colors.black54,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.orange.shade400
+                      : Colors.black54,
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
@@ -243,7 +274,9 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).brightness == Brightness.light ? Colors.deepOrangeAccent.withOpacity(0.8) : Colors.black54),
+                      Theme.of(context).brightness == Brightness.light
+                          ? Colors.deepOrangeAccent.withOpacity(0.8)
+                          : Colors.black54),
                   minimumSize:
                       MaterialStateProperty.all<Size>(const Size(250, 50)),
                 ),
