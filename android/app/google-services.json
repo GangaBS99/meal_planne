@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "778503580207",
+    "project_id": "my-contact-app-25684",
+    "storage_bucket": "my-contact-app-25684.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778503580207:android:32fc5cf598eb8765e3b4da",
+        "android_client_info": {
+          "package_name": "com.example.meal_tracker_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSAgVZhAzk5qIbIYYZuT437ZnPn1DjiEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
