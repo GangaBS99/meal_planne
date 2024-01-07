@@ -42,7 +42,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
 
       return FirebaseFirestore.instance
           .collection("addMealData")
-          .doc(newDate.toString())
+          .doc(DateTime.now().toString())
           .set({
         'meal_name': mealNameController.text.trim(),
         'category': valueChoose,

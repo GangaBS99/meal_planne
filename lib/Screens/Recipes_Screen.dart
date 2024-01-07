@@ -291,10 +291,10 @@ class _RecipeScreenState extends State<RecipeScreen>
                           DateTime? mealDate = meal.get("create_time").toDate();
                           String? mealName = meal.get("meal_name").toString();
                           print('mealDate: $mealDate');
-                          print('focusedDate: $_focusDay');
+                          print('focusedDate: $md');
                           print('meal_name: $mealName');
                           return mealDate != null &&
-                              isSameDay(mealDate, _focusDay);
+                              isSameDay(mealDate, md.datestore);
                         }).toList();
                         print('Current User ID: $currentUserId');
                         print(meals.length);
@@ -320,11 +320,14 @@ class _RecipeScreenState extends State<RecipeScreen>
                                 itemCount: meals.length,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  String d = dateFormat.format(_focusDay);
+                                  String d = dateFormat.format(md.datestore!);
                                   String e = dateFormat.format(
                                       DateTime.fromMillisecondsSinceEpoch(
-                                          (snapshot.data!.docs[index]
-                                                      .get("create_time")
+                                          // (snapshot.data!.docs[index]
+                                          //             .get("create_time")
+                                          //         as Timestamp)
+                                          //     .millisecondsSinceEpoch)
+                                          (meals[index].get("create_time")
                                                   as Timestamp)
                                               .millisecondsSinceEpoch));
                                   String firebaseDate = snapshot
@@ -336,7 +339,7 @@ class _RecipeScreenState extends State<RecipeScreen>
                                   // print(snapshot.data!.docs[index].get("category"));
                                   // print(snapshot.data!.docs[index].get("meal_name"));
                                   // print(snapshot.data!.docs[index].get("create_time").toString());
-                                  print("Focus day = $_focusDay");
+                                  print("Focus day = ${md.datestore}");
                                   print('hello ${d},${e} ${d == e}');
 
                                   return d == e
@@ -395,7 +398,7 @@ class _RecipeScreenState extends State<RecipeScreen>
                                                         child: Row(
                                                           children: [
                                                             Text(
-                                                              "${snapshot.data!.docs[index].get("category")}",
+                                                              "${meals[index].get("category")}",
                                                               style: GoogleFonts
                                                                   .amiri(
                                                                 textStyle:
@@ -431,20 +434,14 @@ class _RecipeScreenState extends State<RecipeScreen>
                                                             InkWell(
                                                               onTap: () {
                                                                 openDialogBox(
-                                                                  id: snapshot
-                                                                      .data!
-                                                                      .docs[
+                                                                  id: meals[
                                                                           index]
                                                                       .id,
-                                                                  category: snapshot
-                                                                      .data!
-                                                                      .docs[
+                                                                  category: meals[
                                                                           index]
                                                                       .get(
                                                                           "category"),
-                                                                  mealName: snapshot
-                                                                      .data!
-                                                                      .docs[
+                                                                  mealName: meals[
                                                                           index]
                                                                       .get(
                                                                           "meal_name"),
@@ -461,10 +458,7 @@ class _RecipeScreenState extends State<RecipeScreen>
                                                             InkWell(
                                                               onTap: () {
                                                                 deleteDialogBox(
-                                                                    snapshot
-                                                                        .data!
-                                                                        .docs[
-                                                                            index]
+                                                                    meals[index]
                                                                         .id);
                                                               },
                                                               child:
@@ -513,25 +507,21 @@ class _RecipeScreenState extends State<RecipeScreen>
                                                                     const EdgeInsets
                                                                         .all(
                                                                         12.0),
-                                                                child: snapshot
-                                                                            .data!
-                                                                            .docs[
-                                                                                index]
-                                                                            .get(
-                                                                                "category") ==
+                                                                child: meals[index].get(
+                                                                            "category") ==
                                                                         "Breakfast"
                                                                     ? Image.asset(
                                                                         'assets/breakfast.png')
-                                                                    : snapshot.data!.docs[index].get("category") ==
+                                                                    : meals[index].get("category") ==
                                                                             "Lunch"
                                                                         ? Image.asset(
                                                                             "assets/forlunch.png")
-                                                                        : snapshot.data!.docs[index].get("category") ==
+                                                                        : meals[index].get("category") ==
                                                                                 "Dinner"
                                                                             ? Image.asset("assets/fordinner.png")
-                                                                            : snapshot.data!.docs[index].get("category") == "Dessert"
+                                                                            : meals[index].get("category") == "Dessert"
                                                                                 ? Image.asset("assets/fordessert.png")
-                                                                                : snapshot.data!.docs[index].get("category") == "Snacks"
+                                                                                : meals[index].get("category") == "Snacks"
                                                                                     ? Image.asset("assets/Anything.png")
                                                                                     : Image.asset("assets/forsnacks.png"),
                                                               ),
@@ -539,7 +529,7 @@ class _RecipeScreenState extends State<RecipeScreen>
                                                             const SizedBox(
                                                                 width: 10),
                                                             Text(
-                                                              "Meal : ${snapshot.data!.docs[index].get("meal_name")}",
+                                                              "Meal : ${meals[index].get("meal_name")}",
                                                               style: GoogleFonts
                                                                   .amiri(
                                                                 textStyle:
